@@ -7,6 +7,7 @@
 	<title>ScpoAPI - 主页</title>
 	<link rel="stylesheet" type="text/css" href="//seventop.top/css/monokai.css" />
 	<link rel="stylesheet" type="text/css" href="/style.css" />
+	<script src="/script.js"></script>
 	<script src="//js.seventop.top/scpo-ajax.min.js"></script>
 	<script type="text/javascript">
 		ScpoAJAX.post('./via.php', 'operation=get_api_list', function (data) {
@@ -41,20 +42,6 @@
 
 <body>
 	<h1 id="ldH">加载中<span id="ldP"> .</span></h1>
-	<script type="text/javascript">
-		var ready = (function () {
-			var count = 0, timer = setInterval(function () {
-				ldP.innerHTML = "", ldH.style.display = 'block';
-				for (var i = ++count % 3; i >= 0; i--) ldP.innerHTML += " .";
-				if (count == 5) die('err'), clearInterval(timer);
-			}, 1000);
-			return function () {
-				main.style.display = 'block';
-				ldH.style.display = 'none';
-				clearInterval(timer);
-			}
-		}());
-	</script>
 	<div id="main">
 		<h1>ScpoAPI</h1>
 		人生苦短，我用API<br /><br />

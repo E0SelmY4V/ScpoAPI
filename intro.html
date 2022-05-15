@@ -7,6 +7,7 @@
 	<title>ScpoAPI</title>
 	<link rel="stylesheet" type="text/css" href="//seventop.top/css/monokai.css" />
 	<link rel="stylesheet" type="text/css" href="/style.css" />
+	<script src="/script.js"></script>
 	<script src="//js.seventop.top/scpo-ajax.min.js"></script>
 	<script type="text/javascript">
 		"use strict";
@@ -75,18 +76,6 @@
 			}
 			return s;
 		}
-		var errorInfo = {
-			'err': '连接服务器失败，刷新试试吧',
-			'-1': '当前API不可用，之后再试试吧',
-			'1': '当前API维护中，等会再试试吧',
-			'2': '当前API不存在，请检查网址是否正确',
-		};
-		function die(n) {
-			var ref, n = String(n);
-			document.readyState == "complete" ? (ref = function () {
-				document.body.innerHTML = '<h1>错误！</h1>' + (errorInfo[n] ? errorInfo[n] : errorInfo.err);
-			})() : window.onload = ref;
-		}
 		ScpoAJAX.post("./via.php", "operation=verify_aid&aid=" + location.search.slice(1), function (name) {
 			name = JSON.parse(name);
 			if (!name) return die(2);
@@ -124,20 +113,6 @@
 
 <body>
 	<h1 id="ldH">加载中<span id="ldP"> .</span></h1>
-	<script type="text/javascript">
-		var ready = (function () {
-			var count = 0, timer = setInterval(function () {
-				ldP.innerHTML = "", ldH.style.display = 'block';
-				for (var i = ++count % 3; i >= 0; i--) ldP.innerHTML += " .";
-				if (count == 5) die('err'), clearInterval(timer);
-			}, 1000);
-			return function () {
-				main.style.display = 'block';
-				ldH.style.display = 'none';
-				clearInterval(timer);
-			}
-		}());
-	</script>
 	<div id="main">
 		<h1 id="boxName" style="display: inline-block;"></h1><br />
 		<span id="boxDesc"></span><br /><br />

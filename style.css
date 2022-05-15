@@ -1,0 +1,64 @@
+* {
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+
+body {
+	padding: 5%;
+}
+
+td,
+th {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	text-align: center;
+}
+
+.link {
+	color: #E6DB74;
+	cursor: pointer;
+}
+
+.link:hover {
+	color: #E6DB74;
+	background: #444;
+}
+
+#boxDesc {
+	display: inline-block;
+	max-width: 30em;
+}
+
+ul {
+	margin-left: 0.2em;
+	margin-bottom: 0.5em;
+	padding-left: 0.6em;
+	list-style: none;
+}
+
+.head {
+	position: absolute;
+	height: 100%;
+	width: 0.5em;
+	left: -0.2em;
+}
+
+.api-title {
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	padding-bottom: 0.1em;
+	padding-top: 0.1em;
+}
+
+li {
+	padding-top: 0.2em;
+}
+
+#main {
+	display: none;
+}
+
+#ldH {
+	display: none;
+}

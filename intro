@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.9">
+	<title>ScpoAPI</title>
+	<link rel="stylesheet" type="text/css" href="//seventop.top/css/monokai.css" />
+	<link rel="stylesheet" type="text/css" href="/style.css" />
+	<script src="//js.seventop.top/scpo-ajax.js"></script>
+	<script type="text/javascript">
+		"use strict";
+		function sepData(n) {
+			var r = Array.isArray(n) ? [[], []] : [{}, {}], o;
+			if (n['@'] === '@') r[0] = n[0], r[1] = n[1];
+			else for (var i in n) if (n[i] instanceof Object) o = sepData(n[i]), r[0][i] = o[0], r[1][i] = o[1];
+			return r;
+		}
+		function createTableIntro(n) {
+			var h = ["<tr><th"], s = ">字段</th><th>说明</th></tr><tr>", m = 0, v = [0], t = [false, -1], f;
+			(f = function (a, l) {
+				if (l > m) m = l;
+				var c = 0;
+				for (var i in a) {
+					if (!a[i]) continue;
+					h.push(s + "<td style='background: #272822;'");
+					v.push(l);
+					s = "><pre class='scpos-monokai-code'>" + i + "</pre></td>";
+					if (typeof a[i] === 'object') c += -(v[v.length - 1] = -f(a[i], l + 1));
+					else a[i] === t[0] ? v[t[1]]-- : (h.push(s + "<td"), s = ">" + a[i] + "</td>", t = [a[i], v.length], v.push(-1)), s += "</tr><tr>", c++;
+				}
+				return c;
+			})(n, 0);
+			h.push(s.slice(0, -4));
+			s = h.shift();
+			while (h.length) {
+				t = (t = v.shift()) < 0 ? -t - 1 ? " rowspan=" + -t : "" : (t = m - t) ? " colspan=" + ++t : "";
+				s += t + h.shift();
+			}
+			return s;
+		}
+		function fmtedJSONify(n) {
+			var n = JSON.stringify(n), r = '', space = '', i = 0, c, instr = false, innum = "";
+			if (!n) return "";
+			while (c = n[i++]) {
+				if (c.indexOf('"') !== -1 && (i < 2 || n[i - 2].indexOf('\\') === -1)) instr === false ? (r += c, instr = "") : (r += "<span class='scpos-monokai--" + (!n[i] || n[i].indexOf(':') === -1 ? "string" : "key") + "'>" + instr + "</span>\"", instr = false);
+				else if (instr !== false) instr += c;
+				else if (c.indexOf(',') !== -1) r += (innum ? "<span class='scpos-monokai--number'>" + innum + '</span>' : "") + c + '\n' + space, innum = "";
+				else if (c.indexOf(']') !== -1 || c.indexOf('}') !== -1) r += (innum ? "<span class='scpos-monokai--number'>" + innum + '</span>' : "") + '\n' + (space = space.slice(0, -4)) + c, innum = "";
+				else if (c.indexOf('[') !== -1) r += n[i].indexOf(']') !== -1 ? (i++, '[]') : c + '\n' + (space += '    ');
+				else if (c.indexOf('{') !== -1) r += n[i].indexOf('}') !== -1 ? (i++, '[]') : c + '\n' + (space += '    ');
+				else if (c.indexOf(':') === -1) innum += c;
+				else r += ': ';
+			}
+			return r;
+		}
+		function createTableStatus(n) {
+			var x = -1, l;
+			while (l = n[++x]) for (var i = 0; i < 3; i++) l[i] = {
+				attr: i != 2 ? 'style="background: #272822;"' : '',
+				text: i != 2 ? '<pre class="scpos-monokai-code">' + (i ? '"' : '')
+					+ '<span class="scpos-monokai--' + (i ? 'string' : 'number')
+					+ '">' + l[i] + '</span>' + (i ? '"' : '') + '</pre>' : l[i]
+			};
+			n.unshift([{ text: '代码' }, { text: '信息' }, { text: '含义' }]);
+			return createTable(n);
+		}
+		function createTable(n) {
+			var s = "", x = -1, y = -1, l, b, t = "th";
+			while (l = n[++x]) {
+				s += "<tr>", y = -1;
+				while (b = l[++y]) s += "<" + t + (b.attr ? " " + b.attr : "") + ">" + (b.text ? b.text : "") + "</" + t + ">";
+				s += "</tr>", t = "td";
+			}
+			return s;
+		}
+		var errorInfo = {
+			'err': '连接服务器失败，刷新试试吧',
+			'-1': '当前API不可用，之后再试试吧',
+			'1': '当前API维护中，等会再试试吧',
+			'2': '当前API不存在，请检查网址是否正确',
+		};
+		function die(n) {
+			var ref, n = String(n);
+			document.readyState == "complete" ? (ref = function () {
+				document.body.innerHTML = '<h1>错误！</h1>' + (errorInfo[n] ? errorInfo[n] : errorInfo.err);
+			})() : window.onload = ref;
+		}
+		ScpoAJAX.post("./via.php", "operation=verify_aid&aid=" + location.search.slice(1), function (name) {
+			name = JSON.parse(name);
+			if (!name) return die(2);
+			document.title += " - " + name;
+			var host = location.host.split('.');
+			host[0] = "";
+			var addr = location.search.slice(1).split('-');
+			addr = location.protocol + '//' + addr.shift() + host.join('.') + "/" + addr.join('/') + "?intro";
+			var url = location.protocol + "//" + location.host + "/" + location.search.slice(1).split("-").join("/");
+			ScpoAJAX.get(addr, "", function (data) {
+				var intro = JSON.parse(data);
+				if (intro.code !== 0) return die(intro.code);
+				intro.data.addr ? intro.data.addr[0] ? intro.data.addr[0] = url : intro.data.addr.shift() : intro.data.addr = [url];
+				var ref, eArr = sepData(intro.data.frmt ? intro.data.frmt : { ERROR: { "@": "@", 0: "错误", 1: null } });
+				document.readyState == "complete" ? (ref = function () {
+					boxName.innerHTML = name;
+					boxDesc.innerHTML = intro.data.desc ? intro.data.desc : "";
+					boxAddr.innerHTML = fmtedJSONify(intro.data.addr);
+					boxMtci.innerHTML = intro.data.mtci ? intro.data.mtci : 'GET';
+					boxType.innerHTML = intro.data.type ? intro.data.type : 'application/json';
+					boxFrmt.innerHTML = createTableIntro(eArr[0]);
+					boxDemo.innerHTML = fmtedJSONify(eArr[1]);
+					boxStat.innerHTML = createTableStatus(intro.data.stat ? intro.data.stat : [
+						[-1, 'failed', 'API不可用'],
+						[0, 'success', '成功了'],
+						[1, 'under_repair', 'API在维护'],
+						[2, 'out_of_service', 'API已停用']
+					]);
+					ready();
+				})() : window.onload = ref;
+			}, function () { die('err') });
+		}, function () { die('err') });
+	</script>
+</head>
+
+<body>
+	<h1 id="ldH">加载中<span id="ldP"> .</span></h1>
+	<script type="text/javascript">
+		var ready = (function () {
+			var count = 0, timer = setInterval(function () {
+				ldP.innerHTML = "", ldH.style.display = 'block';
+				for (var i = ++count % 3; i >= 0; i--) ldP.innerHTML += " .";
+				if (count == 5) die('err'), clearInterval(timer);
+			}, 1000);
+			return function () {
+				main.style.display = 'block';
+				ldH.style.display = 'none';
+				clearInterval(timer);
+			}
+		}());
+	</script>
+	<div id="main">
+		<h1 id="boxName" style="display: inline-block;"></h1><br />
+		<span id="boxDesc"></span><br /><br />
+		<br />可用地址：<br />
+		<pre id="boxAddr" class="scpos-monokai-code scpos-monokai-div"></pre>
+		<br />请求方式：<br />
+		<pre id="boxMtci" class="scpos-monokai-code scpos-monokai-div"></pre>
+		<br />返回格式：<br />
+		<pre id="boxType" class="scpos-monokai-code scpos-monokai-div"></pre>
+		<br />数据说明：<br />
+		<table id="boxFrmt" border="1"></table>
+		<br />返回示例：<br />
+		<pre id="boxDemo" class="scpos-monokai-code scpos-monokai-div"></pre>
+		<br />状态说明：<br />
+		<table id="boxStat" border="1"></table>
+		<br />联系我: <br />
+		QQ2507917746<br /><br /><br />
+		<a href='//seventop.top/support.html'>赞助本站</a>
+		<a href='./' style="margin-left: 1em;">回到主页</a>
+	</div>
+</body>
+
+</html>

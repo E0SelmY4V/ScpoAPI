@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.9">
+	<title>ScpoAPI - 主页</title>
+	<link rel="stylesheet" type="text/css" href="//seventop.top/css/monokai.css" />
+	<link rel="stylesheet" type="text/css" href="/style.css" />
+	<script src="//js.seventop.top/scpo-ajax.js"></script>
+	<script type="text/javascript">
+		ScpoAJAX.post('./via.php', 'operation=get_api_list', function (data) {
+			var api = JSON.parse(data), ref, bgc = [
+				'rgb(186, 167, 186)',
+				'rgb(175, 215, 237)',
+				'rgb(124, 255, 147)'
+			], htm = "", noc = bgc.length, ion = Math.floor(Math.random() * noc--);
+			(function (arr, cof, uri, lvn) {
+				for (var key in arr) {
+					if (key == '&') continue;
+					if (typeof (val = arr[key]) != "string") {
+						var ion = (ion = Math.floor(Math.random() * noc)) + (ion >= cof);
+						htm += '<li><span class="api-title" style="background:' + bgc[ion] + ';"># ' + val['&'] + '</span><ul><div class="head" style="background:' + bgc[ion] + ';"></div>';
+						arguments.callee(val, ion, uri + key + '-', lvn + 1);
+					} else htm += '<li><a href="intro?' + uri + key + '">&nbsp;- ' + val + '</a></li>';
+				}
+				htm += '</ul></li>';
+			}(api, ion, '', 0));
+			var txt = document.createElement("span");
+			txt.className = "api-title";
+			txt.style.background = bgc[ion];
+			txt.innerHTML = "# 所有API";
+			document.readyState == "complete" ? (ref = function () {
+				main.appendChild(txt);
+				main.appendChild(document.createElement("ul")).innerHTML = '<div class="head" style="background:' + bgc[ion] + ';"></div>' + htm;
+				ready();
+			})() : window.onload = ref;
+		});
+	</script>
+</head>
+
+<body>
+	<h1 id="ldH">加载中<span id="ldP"> .</span></h1>
+	<script type="text/javascript">
+		var ready = (function () {
+			var count = 0, timer = setInterval(function () {
+				ldP.innerHTML = "", ldH.style.display = 'block';
+				for (var i = ++count % 3; i >= 0; i--) ldP.innerHTML += " .";
+				if (count == 5) die('err'), clearInterval(timer);
+			}, 1000);
+			return function () {
+				main.style.display = 'block';
+				ldH.style.display = 'none';
+				clearInterval(timer);
+			}
+		}());
+	</script>
+	<div id="main">
+		<h1>ScpoAPI</h1>
+		人生苦短，我用API<br /><br />
+		<div style="position: fixed; right: 5%;bottom: 5%;">
+			请给我钱：
+			<a href='//seventop.top/support.html'>赞助本站</a><br />
+			<br />联系我: <br />
+			QQ2507917746
+		</div>
+	</div>
+</body>
+
+</html>

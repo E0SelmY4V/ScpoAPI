@@ -19,5 +19,6 @@
 		document.readyState == "complete" ? (ref = function () {
 			document.body.innerHTML = '<h1>错误！</h1>' + (errorInfo[n] ? errorInfo[n] : errorInfo.err), clearInterval(timer);
 		})() : window.onload = ref;
-	}
+	};
+	ScpoAJAX.config.ordo = function () { die('err'); };
 }());

@@ -54,7 +54,7 @@ die(json_encode(
 			'data' => array(
 				'addr' => array(true, "http://{$_SERVER['HTTP_HOST']}/fmt?intro"),
 				'desc' => '此API可以获取一个示例的ScpoAPI介绍json。' .
-					'<br />本API获取的示例的效果<a href="./intro?api-fmt">在此查看</a>',
+					'<br />本API获取的示例的效果<a href="./intro.html?api-fmt">在此查看</a>',
 				'mtci' => 'GET',
 				'type' => 'application/json',
 				'frmt' => array(

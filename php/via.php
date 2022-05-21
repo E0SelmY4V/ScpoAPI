@@ -17,15 +17,11 @@ if (($pos = strpos($uri = $_SERVER['QUERY_STRING'], '&')) !== false) {
 // 判断是否合法
 $arr = explode('/', $uri);
 if ($arr[0] == 'api') diejump("{$arr[1]}$get");
-if (end($arr) === '') array_pop($arr);
-if (is_goodAID($arr) === false) {
-	header('HTTP/1.1 404 Not Found');
-	header('Status: 404 Not Found');
-	die();
-}
+if (is_goodAID($arr) === false) include '../../php/error/404.php';
 
 // 合成url
 $dmn = $_SERVER['HTTP_HOST'];
-$dmn = substr($dmn, strpos($dmn, '.'));
-$arr = explode('/', $uri, 2);
-header("Location: http://{$arr[0]}$dmn/{$arr[1]}$get");
+$dmn = substr($dmn, strpos($dmn, '.') + 1);
+$arr = explode('/', str_ireplace(':', '/', $uri), 2);
+$hdr = $arr[0][0] == '@' ? '' : $arr[0] . '.';
+header("Location: http://$hdr$dmn/{$arr[1]}$get");

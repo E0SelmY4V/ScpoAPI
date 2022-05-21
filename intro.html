@@ -81,11 +81,13 @@
 			if (!name) return die(2);
 			document.title += " - " + name;
 			var host = location.host.split('.');
-			host[0] = "";
-			var addr = location.search.slice(1).split('-');
+			host.shift();
+			var addr = decodeURIComponent(location.search.slice(1)).split('-'), head = addr.shift();
 			if (addr[0] == "api") addr = "php/ownapi.php?api=" + addr[1];
-			else addr = location.protocol + '//' + addr.shift() + host.join('.') + "/" + addr.join('/');
-			var url = location.protocol + "//" + location.host + "/" + location.search.slice(1).split("-").join("/");
+			else addr = location.protocol + '//' + (head != '@' ? head + "." : "") + host.join('.') + "/" + addr.join('/');
+			var url = location.search.slice(1).split("-");
+			for (var i = url.length - 1; i >= 0; i--) url[i] = url[i].split('/').join(':');
+			url = location.protocol + "//" + location.host + "/" + url.join("/");
 			ScpoAJAX.get(addr, "intro", function (data) {
 				var intro = JSON.parse(data);
 				if (intro.code !== 0) return die(intro.code);

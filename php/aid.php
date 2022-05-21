@@ -2,6 +2,13 @@
 
 /**API列表 */
 const API_LIST = array(
+    '@' => array(
+        '&' => '主站API',
+        'img' => array(
+            '&' => 'CCPIRA图片库',
+            'others/beauty/random/' => '随机美图'
+        )
+    ),
     'sc' => array(
         '&' => '|简·陋|系列程序',
         'list' => '获取|简·陋|系列程序列表',
@@ -30,8 +37,9 @@ const API_LIST = array(
 function is_goodAID($arr)
 {
     $now = API_LIST;
+    if (end($arr) === '') array_pop($arr);
     foreach ($arr as $val)
-        if (isset($now[$val])) $now = $now[$val];
+        if (isset($now[$val = str_ireplace(':', '/', $val)])) $now = $now[$val];
         else return false;
     return is_string($now) ? $now : false;
 }

@@ -4,5 +4,5 @@
 
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ via.php?$1 [QSA,PT,L]
+  RewriteRule ^(.*)$ php/via.php?$1 [QSA,PT,L]
 </IfModule>

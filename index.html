@@ -10,7 +10,7 @@
 	<script src="//js.seventop.top/scpo-ajax.min.js"></script>
 	<script src="/script.js"></script>
 	<script type="text/javascript">
-		ScpoAJAX.post('./via.php', 'operation=get_api_list', function (data) {
+		ScpoAJAX.post('php/ajax.php', 'operation=get_api_list', function (data) {
 			var api = JSON.parse(data), ref, bgc = [
 				'rgb(186, 167, 186)',
 				'rgb(175, 215, 237)',

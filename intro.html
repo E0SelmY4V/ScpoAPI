@@ -42,15 +42,15 @@
 			return s;
 		}
 		function fmtedJSONify(n) {
-			var n = JSON.stringify(n), r = '', space = '', i = 0, c, instr = false, innum = "";
+			var n = JSON.stringify(n), indent = '  ', r = '', space = '', i = 0, c, instr = false, innum = "";
 			if (!n) return "";
 			while (c = n[i++]) {
 				if (c.indexOf('"') !== -1 && (i < 2 || n[i - 2].indexOf('\\') === -1)) instr === false ? (r += c, instr = "") : (r += "<span class='scpos-monokai--" + (!n[i] || n[i].indexOf(':') === -1 ? "string" : "key") + "'>" + instr + "</span>\"", instr = false);
 				else if (instr !== false) instr += c;
 				else if (c.indexOf(',') !== -1) r += (innum ? "<span class='scpos-monokai--number'>" + innum + '</span>' : "") + c + '\n' + space, innum = "";
-				else if (c.indexOf(']') !== -1 || c.indexOf('}') !== -1) r += (innum ? "<span class='scpos-monokai--number'>" + innum + '</span>' : "") + '\n' + (space = space.slice(0, -4)) + c, innum = "";
-				else if (c.indexOf('[') !== -1) r += n[i].indexOf(']') !== -1 ? (i++, '[]') : c + '\n' + (space += '    ');
-				else if (c.indexOf('{') !== -1) r += n[i].indexOf('}') !== -1 ? (i++, '[]') : c + '\n' + (space += '    ');
+				else if (c.indexOf(']') !== -1 || c.indexOf('}') !== -1) r += (innum ? "<span class='scpos-monokai--number'>" + innum + '</span>' : "") + '\n' + (space = space.slice(0, -indent.length)) + c, innum = "";
+				else if (c.indexOf('[') !== -1) r += n[i].indexOf(']') !== -1 ? (i++, '[]') : c + '\n' + (space += indent);
+				else if (c.indexOf('{') !== -1) r += n[i].indexOf('}') !== -1 ? (i++, '[]') : c + '\n' + (space += indent);
 				else if (c.indexOf(':') === -1) innum += c;
 				else r += ': ';
 			}
@@ -76,16 +76,17 @@
 			}
 			return s;
 		}
-		ScpoAJAX.post("./via.php", "operation=verify_aid&aid=" + location.search.slice(1), function (name) {
+		ScpoAJAX.post("./php/ajax.php", "operation=verify_aid&aid=" + location.search.slice(1), function (name) {
 			name = JSON.parse(name);
 			if (!name) return die(2);
 			document.title += " - " + name;
 			var host = location.host.split('.');
 			host[0] = "";
 			var addr = location.search.slice(1).split('-');
-			addr = location.protocol + '//' + addr.shift() + host.join('.') + "/" + addr.join('/') + "?intro";
+			if (addr[0] == "api") addr = "php/ownapi.php?api=" + addr[1];
+			else addr = location.protocol + '//' + addr.shift() + host.join('.') + "/" + addr.join('/');
 			var url = location.protocol + "//" + location.host + "/" + location.search.slice(1).split("-").join("/");
-			ScpoAJAX.get(addr, "", function (data) {
+			ScpoAJAX.get(addr, "intro", function (data) {
 				var intro = JSON.parse(data);
 				if (intro.code !== 0) return die(intro.code);
 				intro.data.addr ? intro.data.addr[0] ? intro.data.addr[0] = url : intro.data.addr.shift() : intro.data.addr = [url];

@@ -83,7 +83,7 @@
 			var host = location.host.split('.');
 			host.shift();
 			var addr = decodeURIComponent(location.search.slice(1)).split('-'), head = addr.shift();
-			if (addr[0] == "api") addr = "php/ownapi.php?api=" + addr[1];
+			if (head == "api") addr = "php/ownapi.php?api=" + addr[0];
 			else addr = location.protocol + '//' + (head != '@' ? head + "." : "") + host.join('.') + "/" + addr.join('/');
 			var url = location.search.slice(1).split("-");
 			for (var i = url.length - 1; i >= 0; i--) url[i] = url[i].split('/').join(':');

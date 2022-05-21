@@ -91,14 +91,17 @@
 			ScpoAJAX.get(addr, "intro", function (data) {
 				var intro = JSON.parse(data);
 				if (intro.code !== 0) return die(intro.code);
-				intro.data.addr ? intro.data.addr[0] ? intro.data.addr[0] = url : intro.data.addr.shift() : intro.data.addr = [url];
+				if (!intro.data) intro.data = {};
+				if (Array.isArray(intro.data.addr)) intro.data.addr[0] ? intro.data.addr[0] = url : intro.data.addr.shift();
+				else if (typeof intro.data.addr != "undefined") intro.data.addr = intro.data.addr ? url : '';
+				else intro.data.addr = url;
 				var ref, eArr = sepData(intro.data.frmt ? intro.data.frmt : { ERROR: { "@": "@", 0: "错误", 1: null } });
 				document.readyState == "complete" ? (ref = function () {
 					boxName.innerHTML = name;
 					boxDesc.innerHTML = intro.data.desc ? intro.data.desc : "";
 					boxAddr.innerHTML = fmtedJSONify(intro.data.addr);
-					boxMtci.innerHTML = intro.data.mtci ? intro.data.mtci : 'GET';
-					boxType.innerHTML = intro.data.type ? intro.data.type : 'application/json';
+					boxMtci.innerHTML = fmtedJSONify(intro.data.mtci ? JSON.parse(intro.data.mtci) : 'GET');
+					boxType.innerHTML = fmtedJSONify(intro.data.type ? JSON.parse(intro.data.type) : 'application/json');
 					boxFrmt.innerHTML = createTableIntro(eArr[0]);
 					boxDemo.innerHTML = fmtedJSONify(eArr[1]);
 					boxStat.innerHTML = createTableStatus(intro.data.stat ? intro.data.stat : [

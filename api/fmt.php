@@ -7,11 +7,11 @@ header('Content-type: application/json');
 $fmt = array(
 	'code' => 0,
 	'data' => array(
-		'addr' => array(true, "http://{$_SERVER['HTTP_HOST']}/php/ownapi.php?api=fmt?intro"),
+		'addr' => 1,
 		'desc' => '此API可以获取一个示例的ScpoAPI介绍json。' .
 			'<br />本API获取的示例的效果<a href="./intro.html?api-fmt">在此查看</a>',
-		'mtci' => 'GET',
-		'type' => 'application/json',
+		'mtci' => '"GET"',
+		'type' => '"application/json"',
 		'frmt' => array(
 			'code' => array('@' => '@', '介绍状态代码', 0),
 			'data' => array(
@@ -22,8 +22,8 @@ $fmt = array(
 					array('@' => '@', 1 => 'ftp://somewhere/')
 				),
 				'desc' => array('@' => '@', 'API描述', '这是个API介绍json的示例。'),
-				'mtci' => array('@' => '@', '请求方法', 'GET'),
-				'type' => array('@' => '@', '返回格式', 'application/json'),
+				'mtci' => array('@' => '@', '请求方法', '["GET", "POST"]'),
+				'type' => array('@' => '@', '返回格式', '"application/json"'),
 				'frmt' => array(
 					'key1' => array(
 						'@' => array('@' => '@', '字段介绍标识', '@'),

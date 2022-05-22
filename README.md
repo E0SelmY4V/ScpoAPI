@@ -24,7 +24,7 @@ It's used for integrating the API of all the subjects of Scpos to one website.
 
 - For Developer
   
-  Thought using the same data standard, developer can use less time to develop a new API. In addition, there are details and navigation page needn't program again for the new API.
+  Throught using the same data standard, developer can use less time to develop a new API. In addition, there are details and navigation page needn't program again for the new API.
 
 - For User
   

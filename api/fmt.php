@@ -7,11 +7,11 @@ header('Content-type: application/json');
 $fmt = array(
 	'code' => 0,
 	'data' => array(
-		'addr' => 1,
+		'addr' => true,
 		'desc' => '此API可以获取一个示例的ScpoAPI介绍json。' .
 			'<br />本API获取的示例的效果<a href="./intro.html?api-fmt">在此查看</a>',
-		'mtci' => '"GET"',
-		'type' => '"application/json"',
+		'mtci' => 'GET',
+		'type' => 'application/json',
 		'frmt' => array(
 			'code' => array('@' => '@', '介绍状态代码', 0),
 			'data' => array(
@@ -22,13 +22,13 @@ $fmt = array(
 					array('@' => '@', 1 => 'ftp://somewhere/')
 				),
 				'desc' => array('@' => '@', 'API描述', '这是个API介绍json的示例。'),
-				'mtci' => array('@' => '@', '请求方法', '["GET", "POST"]'),
-				'type' => array('@' => '@', '返回格式', '"application/json"'),
+				'mtci' => array('@' => '@', '请求方法', ['GET', 'POST']),
+				'type' => array('@' => '@', '返回格式', 'application/json'),
 				'frmt' => array(
 					'key1' => array(
 						'@' => array('@' => '@', '字段介绍标识', '@'),
 						array('@' => '@', '字段详细描述', '这是个简单数据'),
-						array('@' => '@', '字段内容示例', 'demo data')
+						array('@' => '@', '字段内容示例', 0)
 					),
 					'key2' => array('@' => '@', '示例字段2', array(
 						'@' => '@', '这是个数组',
@@ -52,9 +52,11 @@ $fmt = array(
 							array('a' => 'demo obj-a in arr', 'b' => 'demo obj-b in arr')
 						)
 					))
-				)
+				),
+				'stat' => array('@' =>'@', '状态代码说明', 'normal')
 			)
-		)
+		),
+		'stat' => 'normal'
 	)
 );
 

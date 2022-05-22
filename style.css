@@ -55,10 +55,6 @@ li {
 	padding-top: 0.2em;
 }
 
-#main {
-	display: none;
-}
-
-#ldH {
+.ncls {
 	display: none;
 }

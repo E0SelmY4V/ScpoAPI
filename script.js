@@ -2,7 +2,7 @@
 	var count = 0, timer = setInterval(function () {
 		ldP.innerHTML = "", ldH.style.display = 'block';
 		for (var i = ++count % 3; i >= 0; i--) ldP.innerHTML += " .";
-		if (count == 5) die('err'), clearInterval(timer);
+		// if (count == 30) die('err'), clearInterval(timer);
 	}, 1000), errorInfo = {
 		'err': '连接服务器失败，刷新试试吧',
 		'-1': '当前API不可用，之后再试试吧',

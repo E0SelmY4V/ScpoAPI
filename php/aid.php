@@ -6,7 +6,8 @@ const API_LIST = array(
         '&' => '主站API',
         'img' => array(
             '&' => 'CCPIRA图片库',
-            'others/beauty/random/' => '随机美图'
+            'others/beauty/random/' => '随机ACG美图',
+            'others/water/' => '随机水下CCPIRA背景图'
         )
     ),
     'sc' => array(
